@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>DiplomaVPN</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a2e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        .shield {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            color: #4fc3f7;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #aaaaaa;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .status {
+            background: #1a1a4e;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
+        }
+        .locked { color: #ef5350; }
+        .info { color: #aaaaaa; font-size: 14px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="shield">🛡️</div>
+        <h1>DiplomaVPN</h1>
+        <p>Защищённый доступ к ресурсам</p>
+
+        <div class="status">
+            <div class="status-item">
+                <span>Статус соединения</span>
+                <span class="locked">🔴 Не защищено</span>
+            </div>
+            <div class="status-item">
+                <span>VPN туннель</span>
+                <span class="locked">Не активен</span>
+            </div>
+            <div class="status-item">
+                <span>Защищённый ресурс</span>
+                <span class="locked">Недоступен</span>
+            </div>
+        </div>
+
+        <p class="info">
+            Для доступа к защищённым ресурсам<br>
+            необходимо подключиться через DiplomaVPN
+        </p>
+    </div>
+</body>
+</html>
