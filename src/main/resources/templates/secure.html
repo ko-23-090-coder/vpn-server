@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Защищённый ресурс — DiplomaVPN</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a2e0a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            max-width: 500px;
+        }
+        .shield { font-size: 80px; margin-bottom: 20px; }
+        h1 { font-size: 30px; color: #66bb6a; margin-bottom: 10px; }
+        p { color: #aaaaaa; margin-bottom: 20px; }
+        .status {
+            background: #1a3a1a;
+            border: 1px solid #2e7d32;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a4a1a;
+        }
+        .active { color: #66bb6a; }
+        .secret-content {
+            background: #1a3a1a;
+            border: 2px solid #66bb6a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        .secret-content h2 { color: #66bb6a; margin-bottom: 12px; }
+        .secret-content p { color: #cccccc; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="shield">🔐</div>
+        <h1>Доступ разрешён</h1>
+        <p th:text="${message}">Добро пожаловать!</p>
+
+        <div class="status">
+            <div class="status-item">
+                <span>Статус соединения</span>
+                <span class="active">🟢 Защищено</span>
+            </div>
+            <div class="status-item">
+                <span>VPN туннель</span>
+                <span class="active">Активен</span>
+            </div>
+            <div class="status-item">
+                <span>Пользователь</span>
+                <span class="active" th:text="${userId}">user</span>
+            </div>
+            <div class="status-item">
+                <span>Шифрование</span>
+                <span class="active">AES-256</span>
+            </div>
+        </div>
+
+        <div class="secret-content">
+            <h2>🗂️ Защищённые данные</h2>
+            <p>Этот контент доступен только через<br>
+               защищённый VPN канал DiplomaVPN.<br><br>
+               Соединение зашифровано и аутентифицировано.</p>
+        </div>
+    </div>
+</body>
+</html>
