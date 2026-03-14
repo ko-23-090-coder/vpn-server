@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Защищённый ресурс</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0A0A2E;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #1A1A4E;
+      border-radius: 20px;
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      border: 1px solid #2a2a6e;
+    }
+    .icon { font-size: 72px; margin-bottom: 16px; }
+    .title { font-size: 24px; font-weight: bold; color: #4FC3F7; margin-bottom: 8px; }
+    .subtitle { color: #888; font-size: 14px; margin-bottom: 24px; }
+    .status-green {
+      background: #1b4332;
+      border: 1px solid #2d6a4f;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 24px 0;
+    }
+    .status-red {
+      background: #3b1a1a;
+      border: 1px solid #6a2d2d;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 24px 0;
+    }
+    .status-text-green { color: #52b788; font-size: 20px; font-weight: bold; }
+    .status-text-red { color: #e07070; font-size: 20px; font-weight: bold; }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #2a2a6e;
+      font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #888; }
+    .info-value-green { color: #52b788; font-weight: bold; }
+    .info-value-red { color: #e07070; font-weight: bold; }
+    .footer { margin-top: 24px; color: #555; font-size: 12px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon" id="icon">🔴</div>
+    <div class="title">DiplomaVPN</div>
+    <div class="subtitle">Корпоративный защищённый ресурс</div>
+
+    <div class="status-red" id="statusRed">
+      <div class="status-text-red">🔴 Доступ запрещён</div>
+    </div>
+    <div class="status-green hidden" id="statusGreen">
+      <div class="status-text-green">🟢 Доступ разрешён</div>
+    </div>
+
+    <div id="infoRed">
+      <div class="info-row">
+        <span class="info-label">VPN</span>
+        <span class="info-value-red">Не подключён</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Шифрование</span>
+        <span class="info-value-red">Отсутствует</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Статус доступа</span>
+        <span class="info-value-red">❌ Запрещён</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Ресурс</span>
+        <span class="info-value-red">Недоступен</span>
+      </div>
+      <div class="footer">Для доступа необходимо подключиться через DiplomaVPN</div>
+    </div>
+
+    <div id="infoGreen" class="hidden">
+      <div class="info-row">
+        <span class="info-label">VPN</span>
+        <span class="info-value-green">Подключён ✅</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Шифрование</span>
+        <span class="info-value-green">AES-256</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Статус доступа</span>
+        <span class="info-value-green">✅ Разрешён</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Ресурс</span>
+        <span class="info-value-green">Доступен</span>
+      </div>
+      <div class="footer">Соединение защищено через DiplomaVPN</div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('vpn');
+
+    if (token === 'connected') {
+      document.getElementById('icon').textContent = '🛡️';
+      document.getElementById('statusRed').classList.add('hidden');
+      document.getElementById('statusGreen').classList.remove('hidden');
+      document.getElementById('infoRed').classList.add('hidden');
+      document.getElementById('infoGreen').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
