@@ -46,4 +46,10 @@ public class WebController {
     public String demo() {
         return "demo";
     }
+
+    // Защищённый ресурс — демонстрация VPN
+    @GetMapping("/protected")
+    public String protectedPage() {
+        return "protected";
+    }
 }
