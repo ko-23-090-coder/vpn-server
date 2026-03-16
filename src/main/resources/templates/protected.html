@@ -56,6 +56,16 @@
     .info-value-red { color: #e07070; font-weight: bold; }
     .footer { margin-top: 24px; color: #555; font-size: 12px; }
     .hidden { display: none; }
+    .qr-block {
+      margin-top: 24px;
+      padding: 16px;
+      background: #111133;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .qr-hint { color: #888; font-size: 13px; margin-bottom: 12px; }
+    .qr-sub { color: #555; font-size: 12px; margin-top: 8px; }
+    #qrcode canvas { border-radius: 8px; }
   </style>
 </head>
 <body>
@@ -110,8 +120,15 @@
       </div>
       <div class="footer">Соединение защищено через DiplomaVPN</div>
     </div>
+
+    <div class="qr-block" id="qrBlock">
+      <p class="qr-hint">Отсканируйте QR код для проверки доступа</p>
+      <div id="qrcode"></div>
+      <p class="qr-sub">Без VPN — доступ закрыт</p>
+    </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const token = params.get('vpn');
@@ -122,6 +139,15 @@
       document.getElementById('statusGreen').classList.remove('hidden');
       document.getElementById('infoRed').classList.add('hidden');
       document.getElementById('infoGreen').classList.remove('hidden');
+      document.getElementById('qrBlock').classList.add('hidden');
+    } else {
+      new QRCode(document.getElementById('qrcode'), {
+        text: 'https://vpn-server-production-375a.up.railway.app/protected',
+        width: 180,
+        height: 180,
+        colorDark: '#4FC3F7',
+        colorLight: '#111133',
+      });
     }
   </script>
 </body>
