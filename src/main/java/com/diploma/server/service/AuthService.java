@@ -7,19 +7,29 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AuthService {
-    private final Map<String, User> users = new HashMap<>();
+
+    private final Map<String, User> users = new ConcurrentHashMap<>();
     private final Map<String, String> smsCodes = new ConcurrentHashMap<>();
 
     public AuthService() {
+        // Администратор
         users.put("admin", new User(
             "user_001", "admin", "1234",
-            "+79001234567", "JBSWY3DPEHPK3PXP", true
+            "+79001234567", "admin@gmail.com",
+            "JBSWY3DPEHPK3PXP", true, "admin"
+        ));
+
+        // Обычный пользователь
+        users.put("user", new User(
+            "user_002", "user", "5678",
+            "+79007654321", "user@gmail.com",
+            "JBSWY3DPEHPK3PXP", false, "user"
         ));
     }
 
     public Optional<User> authenticate(String username, String password) {
         User user = users.get(username);
-        if (user != null && user.getPassword().equals(password))
+        if (user != null && !user.isBlocked() && user.getPassword().equals(password))
             return Optional.of(user);
         return Optional.empty();
     }
@@ -54,5 +64,43 @@ public class AuthService {
         return users.values().stream()
                 .filter(u -> u.getId().equals(userId))
                 .findFirst();
+    }
+
+    // ── Методы для админ-панели ──
+
+    public Collection<User> getAllUsers() {
+        return users.values();
+    }
+
+    public void blockUser(String username) {
+        User user = users.get(username);
+        if (user != null) user.setBlocked(true);
+    }
+
+    public void unblockUser(String username) {
+        User user = users.get(username);
+        if (user != null) user.setBlocked(false);
+    }
+
+    public void addUser(String username, String password, 
+                        String email, String role) {
+        String id = "user_" + String.format("%03d", users.size() + 1);
+        users.put(username, new User(
+            id, username, password,
+            "", email, "JBSWY3DPEHPK3PXP",
+            false, role
+        ));
+    }
+
+    public void deleteUser(String username) {
+        users.remove(username);
+    }
+
+    public boolean isAdmin(String userId) {
+        return users.values().stream()
+                .filter(u -> u.getId().equals(userId))
+                .findFirst()
+                .map(u -> "admin".equals(u.getRole()))
+                .orElse(false);
     }
 }
