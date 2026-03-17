@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Админ панель — DiplomaVPN</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0A0A2E;
+      color: white;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
+    .header {
+      background: #1A1A4E;
+      border-bottom: 1px solid #2a2a6e;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-title { font-size: 20px; font-weight: bold; color: #4FC3F7; }
+    .header-right { display: flex; gap: 16px; align-items: center; }
+    .badge {
+      background: #1A237E;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+    .logout {
+      background: #3b1a1a;
+      border: 1px solid #6a2d2d;
+      color: #e07070;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .content { padding: 32px; max-width: 1000px; margin: 0 auto; }
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #4FC3F7;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2a2a6e;
+    }
+
+    /* Таблица пользователей */
+    .table-wrap {
+      background: #1A1A4E;
+      border-radius: 16px;
+      border: 1px solid #2a2a6e;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: #1F3864;
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 13px;
+      color: #4FC3F7;
+      font-weight: bold;
+    }
+    td {
+      padding: 14px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid #2a2a6e;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #1F1F5E; }
+
+    .role-admin {
+      background: #1A237E;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+    .role-user {
+      background: #2a2a6e;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+    .status-active {
+      color: #52b788;
+      font-weight: bold;
+    }
+    .status-blocked {
+      color: #e07070;
+      font-weight: bold;
+    }
+
+    /* Кнопки действий */
+    .btn {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+    .btn-block { background: #3b1a1a; color: #e07070; border: 1px solid #6a2d2d; }
+    .btn-unblock { background: #1b4332; color: #52b788; border: 1px solid #2d6a4f; }
+    .btn-delete { background: #2a2a2a; color: #aaa; border: 1px solid #444; }
+
+    /* Форма добавления */
+    .add-form {
+      background: #1A1A4E;
+      border-radius: 16px;
+      border: 1px solid #2a2a6e;
+      padding: 24px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #0A0A2E;
+      border: 1px solid #2a2a6e;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus { border-color: #4FC3F7; }
+    .form-group select option { background: #1A1A4E; }
+    .btn-add {
+      padding: 10px 20px;
+      background: #1A237E;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-add:hover { background: #283593; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: #1A1A4E;
+      border: 1px solid #2a2a6e;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-num { font-size: 36px; font-weight: bold; color: #4FC3F7; }
+    .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-title">🛡️ DiplomaVPN — Панель администратора</div>
+    <div class="header-right">
+      <span class="badge">👤 admin</span>
+      <a class="logout" href="/admin/logout">Выйти</a>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Статистика -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num" th:text="${users.size()}">0</div>
+        <div class="stat-label">Всего пользователей</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#52b788"
+             th:text="${users.stream().filter(u -> !u.blocked).count()}">0</div>
+        <div class="stat-label">Активных</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#e07070"
+             th:text="${users.stream().filter(u -> u.blocked).count()}">0</div>
+        <div class="stat-label">Заблокированных</div>
+      </div>
+    </div>
+
+    <!-- Таблица пользователей -->
+    <div class="section-title">👥 Пользователи системы</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Логин</th>
+            <th>Email</th>
+            <th>Роль</th>
+            <th>CAPTCHA</th>
+            <th>Статус</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.id}" style="color:#888; font-size:12px;"></td>
+            <td th:text="${user.username}" style="font-weight:bold;"></td>
+            <td th:text="${user.email}" style="color:#888;"></td>
+            <td>
+              <span class="role-admin" th:if="${user.role == 'admin'}">👑 admin</span>
+              <span class="role-user" th:if="${user.role == 'user'}">👤 user</span>
+            </td>
+            <td th:text="${user.captchaRequired ? '✅ Да' : '— Нет'}"></td>
+            <td>
+              <span class="status-active" th:if="${!user.blocked}">🟢 Активен</span>
+              <span class="status-blocked" th:if="${user.blocked}">🔴 Заблокирован</span>
+            </td>
+            <td>
+              <form method="post" action="/admin/unblock" style="display:inline"
+                    th:if="${user.blocked}">
+                <input type="hidden" name="username" th:value="${user.username}"/>
+                <button class="btn btn-unblock" type="submit">Разблокировать</button>
+              </form>
+              <form method="post" action="/admin/block" style="display:inline"
+                    th:if="${!user.blocked && user.role != 'admin'}">
+                <input type="hidden" name="username" th:value="${user.username}"/>
+                <button class="btn btn-block" type="submit">Заблокировать</button>
+              </form>
+              <form method="post" action="/admin/delete" style="display:inline"
+                    th:if="${user.role != 'admin'}">
+                <input type="hidden" name="username" th:value="${user.username}"/>
+                <button class="btn btn-delete" type="submit"
+                        onclick="return confirm('Удалить пользователя?')">
+                  Удалить
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Форма добавления -->
+    <div class="section-title">➕ Добавить пользователя</div>
+    <div class="add-form">
+      <form method="post" action="/admin/add">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Логин</label>
+            <input type="text" name="username" placeholder="username" required/>
+          </div>
+          <div class="form-group">
+            <label>Пароль</label>
+            <input type="password" name="password" placeholder="password" required/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="user@gmail.com" required/>
+          </div>
+          <div class="form-group">
+            <label>Роль</label>
+            <select name="role">
+              <option value="user">👤 user</option>
+              <option value="admin">👑 admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button class="btn-add" type="submit">➕ Добавить</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</body>
+</html>
