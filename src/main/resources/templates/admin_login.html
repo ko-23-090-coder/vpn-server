@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Вход — Админ панель</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0A0A2E;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #1A1A4E;
+      border-radius: 20px;
+      padding: 48px 40px;
+      text-align: center;
+      width: 380px;
+      border: 1px solid #2a2a6e;
+    }
+    .icon { font-size: 56px; margin-bottom: 16px; }
+    .title { font-size: 24px; font-weight: bold; color: #4FC3F7; margin-bottom: 6px; }
+    .subtitle { color: #888; font-size: 13px; margin-bottom: 32px; }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      background: #0A0A2E;
+      border: 1px solid #2a2a6e;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+    input:focus { border-color: #4FC3F7; }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #1A237E;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    button:hover { background: #283593; }
+    .error {
+      background: #3b1a1a;
+      border: 1px solid #6a2d2d;
+      border-radius: 10px;
+      padding: 12px;
+      color: #e07070;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🛡️</div>
+    <div class="title">DiplomaVPN</div>
+    <div class="subtitle">Панель администратора</div>
+
+    <div class="error" th:if="${error}" th:text="${error}"></div>
+
+    <form method="post" action="/admin/login">
+      <input type="text" name="username" placeholder="Логин администратора" required/>
+      <input type="password" name="password" placeholder="Пароль" required/>
+      <button type="submit">🔐 Войти</button>
+    </form>
+  </div>
+</body>
+</html>
