@@ -181,21 +181,21 @@
 
     <!-- Статистика -->
     <div class="stats">
-      <div class="stat-card">
-        <div class="stat-num" th:text="${users.size()}">0</div>
-        <div class="stat-label">Всего пользователей</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" style="color:#52b788"
-             th:text="${users.stream().filter(u -> !u.blocked).count()}">0</div>
-        <div class="stat-label">Активных</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" style="color:#e07070"
-             th:text="${users.stream().filter(u -> u.blocked).count()}">0</div>
-        <div class="stat-label">Заблокированных</div>
-      </div>
+  <div class="stat-card">
+    <div class="stat-num" th:text="${users.size()}">0</div>
+    <div class="stat-label">Всего пользователей</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" style="color:#52b788">
+      <span th:text="${#lists.size(users)}">0</span>
     </div>
+    <div class="stat-label">Активных</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" style="color:#e07070">0</div>
+    <div class="stat-label">Заблокированных</div>
+  </div>
+</div>
 
     <!-- Таблица пользователей -->
     <div class="section-title">👥 Пользователи системы</div>
