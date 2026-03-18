@@ -215,39 +215,45 @@
 </thead>
         <tbody>
           <tr th:each="user : ${users}">
-            <td th:text="${user.id}" style="color:#888; font-size:12px;"></td>
-            <td th:text="${user.username}" style="font-weight:bold;"></td>
-            <td th:text="${user.email}" style="color:#888;"></td>
-            <td>
-              <span class="role-admin" th:if="${user.role == 'admin'}">admin</span>
-              <span class="role-user" th:if="${user.role == 'user'}">user</span>
-            </td>
-            <td th:text="${user.captchaRequired ? 'Да' : '— Нет'}"></td>
-            <td>
-              <span class="status-active" th:if="${!user.blocked}">Активен</span>
-              <span class="status-blocked" th:if="${user.blocked}">Заблокирован</span>
-            </td>
-            <td>
-              <form method="post" action="/admin/unblock" style="display:inline"
-                    th:if="${user.blocked}">
-                <input type="hidden" name="username" th:value="${user.username}"/>
-                <button class="btn btn-unblock" type="submit">Разблокировать</button>
-              </form>
-              <form method="post" action="/admin/block" style="display:inline"
-                    th:if="${!user.blocked && user.role != 'admin'}">
-                <input type="hidden" name="username" th:value="${user.username}"/>
-                <button class="btn btn-block" type="submit">Заблокировать</button>
-              </form>
-              <form method="post" action="/admin/delete" style="display:inline"
-                    th:if="${user.role != 'admin'}">
-                <input type="hidden" name="username" th:value="${user.username}"/>
-                <button class="btn btn-delete" type="submit"
-                        onclick="return confirm('Удалить пользователя?')">
-                  Удалить
-                </button>
-              </form>
-            </td>
-          </tr>
+  <td th:text="${user.id}" style="color:#888; font-size:12px;"></td>
+  <td th:text="${user.username}" style="font-weight:bold;"></td>
+  <td>
+    <span th:text="${user.password}" 
+          style="background:#0A0A2E; padding:3px 8px; 
+                 border-radius:6px; font-family:monospace; 
+                 color:#4FC3F7;"></span>
+  </td>
+  <td th:text="${user.email}" style="color:#888;"></td>
+  <td>
+    <span class="role-admin" th:if="${user.role == 'admin'}">admin</span>
+    <span class="role-user" th:if="${user.role == 'user'}">user</span>
+  </td>
+  <td th:text="${user.captchaRequired ? 'Да' : '— Нет'}"></td>
+  <td>
+    <span class="status-active" th:if="${!user.blocked}">Активен</span>
+    <span class="status-blocked" th:if="${user.blocked}">Заблокирован</span>
+  </td>
+  <td>
+    <form method="post" action="/admin/unblock" style="display:inline"
+          th:if="${user.blocked}">
+      <input type="hidden" name="username" th:value="${user.username}"/>
+      <button class="btn btn-unblock" type="submit">Разблокировать</button>
+    </form>
+    <form method="post" action="/admin/block" style="display:inline"
+          th:if="${!user.blocked && user.role != 'admin'}">
+      <input type="hidden" name="username" th:value="${user.username}"/>
+      <button class="btn btn-block" type="submit">Заблокировать</button>
+    </form>
+    <form method="post" action="/admin/delete" style="display:inline"
+          th:if="${user.role != 'admin'}">
+      <input type="hidden" name="username" th:value="${user.username}"/>
+      <button class="btn btn-delete" type="submit"
+              onclick="return confirm('Удалить пользователя?')">
+        Удалить
+      </button>
+    </form>
+  </td>
+</tr>
         </tbody>
       </table>
     </div>
