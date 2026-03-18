@@ -21,10 +21,10 @@ public class AuthService {
 
         // Обычный пользователь
         users.put("user", new User(
-            "user_002", "user", "5678",
-            "+79007654321", "user@gmail.com",
-            "JBSWY3DPEHPK3PXP", false, "user"
-        ));
+    "user_002", "user", "5678",
+    "+79007654321", "user@gmail.com",
+    "JBSWY3DPEHPK3PXP", true, "user"
+));
     }
 
     public Optional<User> authenticate(String username, String password) {
