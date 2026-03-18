@@ -170,9 +170,9 @@
 <body>
 
   <div class="header">
-    <div class="header-title">🛡️ DiplomaVPN — Панель администратора</div>
+    <div class="header-title">DiplomaVPN — Панель администратора</div>
     <div class="header-right">
-      <span class="badge">👤 admin</span>
+      <span class="badge">admin</span>
       <a class="logout" href="/admin/logout">Выйти</a>
     </div>
   </div>
@@ -186,45 +186,46 @@
     <div class="stat-label">Всего пользователей</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num" style="color:#52b788">
-      <span th:text="${#lists.size(users)}">0</span>
-    </div>
+    <div class="stat-num" style="color:#52b788" 
+         th:text="${users.?[blocked == false].size()}">0</div>
     <div class="stat-label">Активных</div>
   </div>
   <div class="stat-card">
-    <div class="stat-num" style="color:#e07070">0</div>
+    <div class="stat-num" style="color:#e07070"
+         th:text="${users.?[blocked == true].size()}">0</div>
     <div class="stat-label">Заблокированных</div>
   </div>
 </div>
 
     <!-- Таблица пользователей -->
-    <div class="section-title">👥 Пользователи системы</div>
+    <div class="section-title">Пользователи системы</div>
     <div class="table-wrap">
       <table>
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Логин</th>
-            <th>Email</th>
-            <th>Роль</th>
-            <th>CAPTCHA</th>
-            <th>Статус</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
+  <tr>
+    <th>ID</th>
+    <th>Логин</th>
+    <th>Пароль</th>
+    <th>Email</th>
+    <th>Роль</th>
+    <th>CAPTCHA</th>
+    <th>Статус</th>
+    <th>Действия</th>
+  </tr>
+</thead>
         <tbody>
           <tr th:each="user : ${users}">
             <td th:text="${user.id}" style="color:#888; font-size:12px;"></td>
             <td th:text="${user.username}" style="font-weight:bold;"></td>
             <td th:text="${user.email}" style="color:#888;"></td>
             <td>
-              <span class="role-admin" th:if="${user.role == 'admin'}">👑 admin</span>
-              <span class="role-user" th:if="${user.role == 'user'}">👤 user</span>
+              <span class="role-admin" th:if="${user.role == 'admin'}">admin</span>
+              <span class="role-user" th:if="${user.role == 'user'}">user</span>
             </td>
-            <td th:text="${user.captchaRequired ? '✅ Да' : '— Нет'}"></td>
+            <td th:text="${user.captchaRequired ? 'Да' : '— Нет'}"></td>
             <td>
-              <span class="status-active" th:if="${!user.blocked}">🟢 Активен</span>
-              <span class="status-blocked" th:if="${user.blocked}">🔴 Заблокирован</span>
+              <span class="status-active" th:if="${!user.blocked}">Активен</span>
+              <span class="status-blocked" th:if="${user.blocked}">Заблокирован</span>
             </td>
             <td>
               <form method="post" action="/admin/unblock" style="display:inline"
@@ -252,7 +253,7 @@
     </div>
 
     <!-- Форма добавления -->
-    <div class="section-title">➕ Добавить пользователя</div>
+    <div class="section-title">Добавить пользователя</div>
     <div class="add-form">
       <form method="post" action="/admin/add">
         <div class="form-grid">
@@ -271,13 +272,13 @@
           <div class="form-group">
             <label>Роль</label>
             <select name="role">
-              <option value="user">👤 user</option>
-              <option value="admin">👑 admin</option>
+              <option value="user">user</option>
+              <option value="admin">admin</option>
             </select>
           </div>
           <div class="form-group">
             <label>&nbsp;</label>
-            <button class="btn-add" type="submit">➕ Добавить</button>
+            <button class="btn-add" type="submit">Добавить</button>
           </div>
         </div>
       </form>
