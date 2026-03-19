@@ -55,7 +55,7 @@ public class AuthService {
             } else {
                 // Обычный пользователь — код в Telegram
                 sendTelegram(ADMIN_CHAT_ID,
-                    "🔐 Код подтверждения для пользователя @" +
+                    "Код подтверждения для пользователя @" +
                     user.getUsername() + ":\n\n" +
                     "━━━━━━━━━━━━━━\n" +
                     "  " + code + "\n" +
