@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>DiplomaVPN — Вход</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0A0A2E;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #1A1A4E;
+      border-radius: 20px;
+      padding: 40px;
+      width: 400px;
+      border: 1px solid #2a2a6e;
+    }
+    .logo { text-align: center; margin-bottom: 24px; }
+    .logo-icon { font-size: 56px; }
+    .logo-title { font-size: 24px; font-weight: bold; color: #4FC3F7; margin-top: 8px; }
+    .logo-sub { font-size: 13px; color: #888; margin-top: 4px; }
+    .step {
+      display: none;
+    }
+    .step.active { display: block; }
+    .step-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #4FC3F7;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2a2a6e;
+    }
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #0A0A2E;
+      border: 1px solid #2a2a6e;
+      border-radius: 10px;
+      color: white;
+      font-size: 15px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    input:focus { border-color: #4FC3F7; }
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .btn-primary { background: #1A237E; color: white; }
+    .btn-primary:hover { background: #283593; }
+    .btn-success { background: #2E7D32; color: white; }
+    .btn-success:hover { background: #388E3C; }
+    .error {
+      background: #3b1a1a;
+      border: 1px solid #6a2d2d;
+      border-radius: 10px;
+      padding: 12px;
+      color: #e07070;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .success {
+      background: #1b4332;
+      border: 1px solid #2d6a4f;
+      border-radius: 10px;
+      padding: 12px;
+      color: #52b788;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .info {
+      background: #0d1b4b;
+      border: 1px solid #1a2a6e;
+      border-radius: 10px;
+      padding: 12px;
+      color: #4FC3F7;
+      font-size: 13px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .steps-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .step-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #2a2a6e;
+    }
+    .step-dot.active { background: #4FC3F7; }
+    .step-dot.done { background: #52b788; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🛡️</div>
+    <div class="logo-title">DiplomaVPN Gateway</div>
+    <div class="logo-sub">Защищённый доступ к ресурсам</div>
+  </div>
+
+  <!-- Индикатор шагов -->
+  <div class="steps-bar">
+    <div class="step-dot active" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+  </div>
+
+  <!-- Шаг 1: Логин и пароль -->
+  <div class="step active" id="step1">
+    <div class="step-title">🔐 Шаг 1 из 3 — Вход в систему</div>
+    <div class="error" id="err1" style="display:none"></div>
+    <input type="text" id="username" placeholder="Логин"/>
+    <input type="password" id="password" placeholder="Пароль"/>
+    <button class="btn btn-primary" onclick="doLogin()">Продолжить →</button>
+  </div>
+
+  <!-- Шаг 2: SMS код -->
+  <div class="step" id="step2">
+    <div class="step-title">📱 Шаг 2 из 3 — Подтверждение</div>
+    <div class="info" id="smsInfo">Код отправлен. Проверьте Telegram или Railway логи.</div>
+    <div class="error" id="err2" style="display:none"></div>
+    <input type="text" id="smsCode" placeholder="Введите 6-значный код"
+           maxlength="6" inputmode="numeric"/>
+    <button class="btn btn-primary" onclick="doVerifySms()">Подтвердить →</button>
+  </div>
+
+  <!-- Шаг 3: CAPTCHA -->
+  <div class="step" id="step3">
+    <div class="step-title">🤖 Шаг 3 из 3 — Проверка</div>
+    <div class="error" id="err3" style="display:none"></div>
+    <div style="text-align:center; margin-bottom:16px;">
+      <div style="font-size:48px; margin-bottom:8px;">🧩</div>
+      <div style="color:#888; font-size:13px; margin-bottom:16px;">
+        Подтвердите что вы не робот
+      </div>
+      <label style="display:flex; align-items:center; 
+                    gap:12px; cursor:pointer; justify-content:center;
+                    background:#0A0A2E; padding:16px; border-radius:10px;
+                    border:1px solid #2a2a6e;">
+        <input type="checkbox" id="captchaCheck"
+               style="width:20px; height:20px; cursor:pointer; margin:0;"
+               onchange="onCaptcha()"/>
+        <span style="font-size:15px;">Я не робот</span>
+      </label>
+    </div>
+    <button class="btn btn-success" id="btnAccess"
+            style="display:none" onclick="doAccess()">
+      🚀 Получить доступ
+    </button>
+  </div>
+
+</div>
+
+<script>
+  let userId = '';
+  let accessToken = '';
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+  function hideError(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+  function setStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.className = 'step-dot';
+      if (i < n) dot.classList.add('done');
+      if (i === n) dot.classList.add('active');
+    }
+  }
+
+  async function doLogin() {
+    hideError('err1');
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if (!username || !password) {
+      showError('err1', 'Введите логин и пароль');
+      return;
+    }
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (data.requiresTwoFactor) {
+        userId = data.userId;
+        setStep(2);
+      } else {
+        showError('err1', 'Ошибка входа. Проверьте логин и пароль.');
+      }
+    } catch (e) {
+      showError('err1', 'Ошибка соединения с сервером');
+    }
+  }
+
+  async function doVerifySms() {
+    hideError('err2');
+    const code = document.getElementById('smsCode').value.trim();
+    if (code.length !== 6) {
+      showError('err2', 'Введите 6-значный код');
+      return;
+    }
+    try {
+      const res = await fetch('/api/auth/verify-2fa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, code })
+      });
+      const data = await res.json();
+      if (data.requiresCaptcha !== undefined) {
+        setStep(3);
+      } else {
+        showError('err2', 'Неверный код. Попробуйте ещё раз.');
+      }
+    } catch (e) {
+      showError('err2', 'Ошибка соединения с сервером');
+    }
+  }
+
+  async function doVerifyCaptcha() {
+    try {
+      const res = await fetch('/api/auth/verify-captcha', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, captchaToken: 'web_captcha_ok' })
+      });
+      const data = await res.json();
+      if (data.token) {
+        accessToken = data.token;
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  function onCaptcha() {
+    const checked = document.getElementById('captchaCheck').checked;
+    document.getElementById('btnAccess').style.display = checked ? 'block' : 'none';
+  }
+
+  async function doAccess() {
+    hideError('err3');
+    const ok = await doVerifyCaptcha();
+    if (ok) {
+      window.location.href = '/protected?vpn=connected';
+    } else {
+      showError('err3', 'Ошибка проверки. Попробуйте снова.');
+    }
+  }
+</script>
+</body>
+</html>
