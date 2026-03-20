@@ -25,13 +25,14 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req) {
         return authService.authenticate(req.getUsername(), req.getPassword())
                 .map(user -> {
-                    authService.generateAndStoreSmsCode(user.getId());
-                    LoginResponse r = new LoginResponse();
-                    r.setRequiresTwoFactor(true);
-                    r.setTwoFactorMethod("SMS");
-                    r.setUserId(user.getId());
-                    return ResponseEntity.ok(r);
-                })
+    authService.generateAndStoreSmsCode(user.getId());
+    LoginResponse r = new LoginResponse();
+    r.setRequiresTwoFactor(true);
+    r.setTwoFactorMethod("SMS");
+    r.setUserId(user.getId());
+    r.setRole(user.getRole());
+    return ResponseEntity.ok(r);
+})
                 .orElseGet(() -> {
                     LoginResponse e = new LoginResponse();
                     e.setError("Неверный логин или пароль");
