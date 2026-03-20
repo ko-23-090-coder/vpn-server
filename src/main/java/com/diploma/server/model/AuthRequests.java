@@ -25,11 +25,12 @@ public class AuthRequests {
 
     public static class LoginResponse {
         private boolean requiresTwoFactor;
-        private String twoFactorMethod;
-        private String userId;
-        private String token;
-        private VpnConfig vpnConfig;
-        private String error;
+    private String twoFactorMethod;
+    private String userId;
+    private String token;
+    private VpnConfig vpnConfig;
+    private String error;
+    private String role;
         public boolean isRequiresTwoFactor() { return requiresTwoFactor; }
         public void setRequiresTwoFactor(boolean v) { this.requiresTwoFactor = v; }
         public String getTwoFactorMethod() { return twoFactorMethod; }
@@ -42,6 +43,8 @@ public class AuthRequests {
         public void setVpnConfig(VpnConfig v) { this.vpnConfig = v; }
         public String getError() { return error; }
         public void setError(String v) { this.error = v; }
+    public String getRole() { return role; }
+    public void setRole(String v) { this.role = v; }
     }
 
     public static class TwoFactorResponse {
