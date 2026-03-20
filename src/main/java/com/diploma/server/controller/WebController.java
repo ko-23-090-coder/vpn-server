@@ -47,9 +47,14 @@ public class WebController {
         return "demo";
     }
 
-    // Защищённый ресурс — демонстрация VPN
     @GetMapping("/protected")
     public String protectedPage() {
         return "protected";
+    }
+
+    // Gateway — веб-версия входа с 2FA
+    @GetMapping("/gateway")
+    public String gateway() {
+        return "gateway";
     }
 }
