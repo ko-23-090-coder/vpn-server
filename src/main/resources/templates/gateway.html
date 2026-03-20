@@ -177,9 +177,11 @@
     el.textContent = msg;
     el.style.display = 'block';
   }
+
   function hideError(id) {
     document.getElementById(id).style.display = 'none';
   }
+
   function setStep(n) {
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     document.getElementById('step' + n).classList.add('active');
@@ -191,7 +193,7 @@
     }
   }
 
-  async function doLogin() {
+  function doLogin() {
     hideError('err1');
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
@@ -199,76 +201,74 @@
       showError('err1', 'Введите логин и пароль');
       return;
     }
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
+    fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(data => {
       if (data.requiresTwoFactor) {
         userId = data.userId;
+        const role = data.role;
+        const infoEl = document.getElementById('smsInfo');
+        if (role === 'admin') {
+          infoEl.textContent = '📋 Код отправлен. Проверьте логи Railway.';
+          infoEl.style.background = '#1b2a4b';
+          infoEl.style.borderColor = '#1a3a6e';
+          infoEl.style.color = '#4FC3F7';
+        } else {
+          infoEl.textContent = '📱 Код отправлен в Telegram. Проверьте бота DiplomaVPN.';
+          infoEl.style.background = '#1b3a2b';
+          infoEl.style.borderColor = '#1a5a3e';
+          infoEl.style.color = '#52b788';
+        }
         setStep(2);
       } else {
         showError('err1', 'Ошибка входа. Проверьте логин и пароль.');
       }
-    } catch (e) {
-      showError('err1', 'Ошибка соединения с сервером');
-    }
+    })
+    .catch(() => showError('err1', 'Ошибка соединения с сервером'));
   }
 
-  async function doVerifySms() {
+  function doVerifySms() {
     hideError('err2');
     const code = document.getElementById('smsCode').value.trim();
     if (code.length !== 6) {
       showError('err2', 'Введите 6-значный код');
       return;
     }
-    try {
-      const res = await fetch('/api/auth/verify-2fa', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, code })
-      });
-      const data = await res.json();
-      if (data.requiresTwoFactor) {
-    userId = data.userId;
-    const role = data.role;
-    const infoEl = document.getElementById('smsInfo');
-    if (role === 'admin') {
-        infoEl.textContent = 'Код отправлен. Проверьте логи Railway.';
-        infoEl.style.background = '#1b2a4b';
-        infoEl.style.borderColor = '#1a3a6e';
-        infoEl.style.color = '#4FC3F7';
-    } else {
-        infoEl.textContent = 'Код отправлен в Telegram. Проверьте бота DiplomaVPN.';
-        infoEl.style.background = '#1b3a2b';
-        infoEl.style.borderColor = '#1a5a3e';
-        infoEl.style.color = '#52b788';
-    }
-    setStep(2);
-}
+    fetch('/api/auth/verify-2fa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, code })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
         showError('err2', 'Неверный код. Попробуйте ещё раз.');
+      } else {
+        setStep(3);
       }
-    } catch (e) {
-      showError('err2', 'Ошибка соединения с сервером');
-    }
+    })
+    .catch(() => showError('err2', 'Ошибка соединения с сервером'));
   }
 
-  async function doVerifyCaptcha() {
-    try {
-      const res = await fetch('/api/auth/verify-captcha', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, captchaToken: 'web_captcha_ok' })
-      });
-      const data = await res.json();
+  function doVerifyCaptcha() {
+    return fetch('/api/auth/verify-captcha', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, captchaToken: 'web_captcha_ok' })
+    })
+    .then(res => res.json())
+    .then(data => {
       if (data.token) {
         accessToken = data.token;
         return true;
       }
-    } catch (e) {}
-    return false;
+      return false;
+    })
+    .catch(() => false);
   }
 
   function onCaptcha() {
@@ -276,15 +276,14 @@
     document.getElementById('btnAccess').style.display = checked ? 'block' : 'none';
   }
 
-  async function doAccess() {
+  function doAccess() {
     hideError('err3');
-    const ok = await doVerifyCaptcha();
-    if (ok) {
-      window.location.href = '/protected?vpn=connected';
-    } else {
-      showError('err3', 'Ошибка проверки. Попробуйте снова.');
-    }
+    doVerifyCaptcha().then(ok => {
+      if (ok) {
+        window.location.href = '/protected?vpn=connected';
+      } else {
+        showError('err3', 'Ошибка проверки. Попробуйте снова.');
+      }
+    });
   }
 </script>
-</body>
-</html>
