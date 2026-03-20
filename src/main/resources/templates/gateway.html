@@ -231,9 +231,23 @@
         body: JSON.stringify({ userId, code })
       });
       const data = await res.json();
-      if (data.requiresCaptcha !== undefined) {
-        setStep(3);
-      } else {
+      if (data.requiresTwoFactor) {
+    userId = data.userId;
+    const role = data.role;
+    const infoEl = document.getElementById('smsInfo');
+    if (role === 'admin') {
+        infoEl.textContent = 'Код отправлен. Проверьте логи Railway.';
+        infoEl.style.background = '#1b2a4b';
+        infoEl.style.borderColor = '#1a3a6e';
+        infoEl.style.color = '#4FC3F7';
+    } else {
+        infoEl.textContent = 'Код отправлен в Telegram. Проверьте бота DiplomaVPN.';
+        infoEl.style.background = '#1b3a2b';
+        infoEl.style.borderColor = '#1a5a3e';
+        infoEl.style.color = '#52b788';
+    }
+    setStep(2);
+}
         showError('err2', 'Неверный код. Попробуйте ещё раз.');
       }
     } catch (e) {
