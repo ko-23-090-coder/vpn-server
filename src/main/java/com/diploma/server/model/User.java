@@ -1,5 +1,9 @@
 package com.diploma.server.model;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 public class User {
     private String id;
     private String username;
@@ -8,8 +12,9 @@ public class User {
     private String email;
     private String totpSecret;
     private boolean captchaRequired;
-    private String role; // "admin" или "user"
+    private String role;
     private boolean blocked;
+    private LocalDateTime lastLogin;
 
     public User() {}
 
@@ -25,6 +30,7 @@ public class User {
         this.captchaRequired = captchaRequired;
         this.role = role;
         this.blocked = false;
+        this.lastLogin = null;
     }
 
     public String getId() { return id; }
@@ -36,10 +42,20 @@ public class User {
     public boolean isCaptchaRequired() { return captchaRequired; }
     public String getRole() { return role; }
     public boolean isBlocked() { return blocked; }
+    public LocalDateTime getLastLogin() { return lastLogin; }
+
     public void setBlocked(boolean blocked) { this.blocked = blocked; }
     public void setPassword(String password) { this.password = password; }
     public void setRole(String role) { this.role = role; }
-    public void setCaptchaRequired(boolean captchaRequired) { 
-        this.captchaRequired = captchaRequired; 
+    public void setCaptchaRequired(boolean captchaRequired) {
+        this.captchaRequired = captchaRequired;
+    }
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public String getLastLoginFormatted() {
+        if (lastLogin == null) return "Ещё не входил";
+        return lastLogin.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
     }
 }
