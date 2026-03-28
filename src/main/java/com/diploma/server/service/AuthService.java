@@ -2,6 +2,8 @@ package com.diploma.server.service;
 
 import com.diploma.server.model.User;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.net.http.HttpClient;
@@ -12,10 +14,10 @@ import java.net.URI;
 @Service
 public class AuthService {
 
+    private static final ZoneId ALMATY = ZoneId.of("Asia/Almaty");
     private final Map<String, User> users = new ConcurrentHashMap<>();
     private final Map<String, String> smsCodes = new ConcurrentHashMap<>();
 
-    // Telegram настройки
     private static final String BOT_TOKEN = "8231613573:AAFqOGdEosUwqvU1JNXhVFUKRPXNhU4yvqA";
     private static final String ADMIN_CHAT_ID = "6730631376";
 
@@ -39,24 +41,36 @@ public class AuthService {
         return Optional.empty();
     }
 
+    // Обновить время последнего входа
+    public void updateLastLogin(String userId) {
+        users.values().stream()
+            .filter(u -> u.getId().equals(userId))
+            .findFirst()
+            .ifPresent(u -> u.setLastLogin(LocalDateTime.now(ALMATY)));
+    }
+
+    // Включить/выключить CAPTCHA
+    public void toggleCaptcha(String username) {
+        User user = users.get(username);
+        if (user != null) {
+            user.setCaptchaRequired(!user.isCaptchaRequired());
+        }
+    }
+
     public String generateAndStoreSmsCode(String userId) {
         String code = String.format("%06d", new Random().nextInt(999999));
         smsCodes.put(userId, code);
 
-        // Находим пользователя
         Optional<User> userOpt = findById(userId);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             if ("admin".equals(user.getRole())) {
-                // Админ — код в логах Railway
                 System.out.println("==================================");
                 System.out.println("SMS КОД для " + userId + ": " + code);
                 System.out.println("==================================");
             } else {
-                // Обычный пользователь — код в Telegram
                 sendTelegram(ADMIN_CHAT_ID,
-                    "Код подтверждения для пользователя @" +
-                    user.getUsername() + ":\n\n" +
+                    "Код подтверждения для @" + user.getUsername() + ":\n\n" +
                     "━━━━━━━━━━━━━━\n" +
                     "  " + code + "\n" +
                     "━━━━━━━━━━━━━━\n" +
@@ -72,8 +86,7 @@ public class AuthService {
             String encoded = java.net.URLEncoder.encode(text, "UTF-8");
             String url = "https://api.telegram.org/bot" + BOT_TOKEN +
                          "/sendMessage?chat_id=" + chatId +
-                         "&text=" + encoded + "&parse_mode=HTML";
-
+                         "&text=" + encoded;
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
