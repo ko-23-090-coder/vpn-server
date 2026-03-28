@@ -18,8 +18,8 @@ public class AdminController {
     private final JwtUtil jwtUtil;
     private final StatsService statsService;
 
-    public AdminController(AuthService authService, 
-                          JwtUtil jwtUtil, 
+    public AdminController(AuthService authService,
+                          JwtUtil jwtUtil,
                           StatsService statsService) {
         this.authService = authService;
         this.jwtUtil = jwtUtil;
@@ -83,6 +83,14 @@ public class AdminController {
     public String unblockUser(@RequestParam String username,
             @CookieValue(value = "admin_token", required = false) String token) {
         if (isAuthorized(token)) authService.unblockUser(username);
+        return "redirect:/admin";
+    }
+
+    // Включить/выключить CAPTCHA
+    @PostMapping("/toggle-captcha")
+    public String toggleCaptcha(@RequestParam String username,
+            @CookieValue(value = "admin_token", required = false) String token) {
+        if (isAuthorized(token)) authService.toggleCaptcha(username);
         return "redirect:/admin";
     }
 
