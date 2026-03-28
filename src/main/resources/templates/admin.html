@@ -8,58 +8,54 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0A0A2E; color: white; font-family: Arial, sans-serif; }
     .header {
-      background: #1A1A4E;
-      border-bottom: 1px solid #2a2a6e;
-      padding: 16px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: #1A1A4E; border-bottom: 1px solid #2a2a6e;
+      padding: 16px 32px; display: flex;
+      justify-content: space-between; align-items: center;
     }
     .header-title { font-size: 20px; font-weight: bold; color: #4FC3F7; }
     .badge { background: #1A237E; padding: 6px 14px; border-radius: 20px; font-size: 13px; }
     .logout { background: #3b1a1a; border: 1px solid #6a2d2d; color: #e07070;
               padding: 6px 14px; border-radius: 20px; font-size: 13px; text-decoration: none; }
     .content { padding: 32px; max-width: 1100px; margin: 0 auto; }
-
-    /* Табы */
     .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
-    .tab {
-      padding: 10px 20px; border-radius: 10px; cursor: pointer;
-      font-size: 14px; border: 1px solid #2a2a6e;
-      background: #1A1A4E; color: #888;
-    }
+    .tab { padding: 10px 20px; border-radius: 10px; cursor: pointer;
+           font-size: 14px; border: 1px solid #2a2a6e;
+           background: #1A1A4E; color: #888; }
     .tab.active { background: #1A237E; color: white; border-color: #1A237E; }
-
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Статистика */
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-    .stat-card {
+    /* Статус сервера */
+    .server-status {
       background: #1A1A4E; border: 1px solid #2a2a6e;
-      border-radius: 16px; padding: 20px; text-align: center;
+      border-radius: 16px; padding: 16px 24px;
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 24px;
     }
+    .server-dot { width: 14px; height: 14px; border-radius: 50%; background: #888; }
+    .server-dot.online { background: #52b788; box-shadow: 0 0 8px #52b788; }
+    .server-dot.offline { background: #e07070; box-shadow: 0 0 8px #e07070; }
+    .server-info { flex: 1; }
+    .server-name { font-weight: bold; font-size: 15px; }
+    .server-ping { color: #888; font-size: 13px; margin-top: 2px; }
+    .server-url { color: #4FC3F7; font-size: 12px; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: #1A1A4E; border: 1px solid #2a2a6e;
+                 border-radius: 16px; padding: 20px; text-align: center; }
     .stat-num { font-size: 36px; font-weight: bold; color: #4FC3F7; }
     .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
 
-    /* Графики */
     .charts { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
-    .chart-card {
-      background: #1A1A4E; border: 1px solid #2a2a6e;
-      border-radius: 16px; padding: 20px;
-    }
+    .chart-card { background: #1A1A4E; border: 1px solid #2a2a6e;
+                  border-radius: 16px; padding: 20px; }
     .chart-title { font-size: 15px; font-weight: bold; color: #4FC3F7; margin-bottom: 16px; }
 
-    /* Таблица событий */
-    .section-title {
-      font-size: 16px; font-weight: bold; color: #4FC3F7;
-      margin-bottom: 16px; padding-bottom: 10px;
-      border-bottom: 1px solid #2a2a6e;
-    }
-    .table-wrap {
-      background: #1A1A4E; border-radius: 16px;
-      border: 1px solid #2a2a6e; overflow: hidden; margin-bottom: 24px;
-    }
+    .section-title { font-size: 16px; font-weight: bold; color: #4FC3F7;
+                     margin-bottom: 16px; padding-bottom: 10px;
+                     border-bottom: 1px solid #2a2a6e; }
+    .table-wrap { background: #1A1A4E; border-radius: 16px;
+                  border: 1px solid #2a2a6e; overflow: hidden; margin-bottom: 24px; }
     table { width: 100%; border-collapse: collapse; }
     th { background: #1F3864; padding: 12px 16px; text-align: left;
          font-size: 13px; color: #4FC3F7; }
@@ -76,24 +72,28 @@
     .status-active { color: #52b788; font-weight: bold; }
     .status-blocked { color: #e07070; font-weight: bold; }
 
-    .btn { padding: 6px 14px; border: none; border-radius: 8px;
-           font-size: 12px; cursor: pointer; margin-right: 6px; }
+    .btn { padding: 6px 12px; border: none; border-radius: 8px;
+           font-size: 11px; cursor: pointer; margin-right: 4px; }
     .btn-block { background: #3b1a1a; color: #e07070; border: 1px solid #6a2d2d; }
     .btn-unblock { background: #1b4332; color: #52b788; border: 1px solid #2d6a4f; }
     .btn-delete { background: #2a2a2a; color: #aaa; border: 1px solid #444; }
+    .btn-captcha-on { background: #1b4332; color: #52b788; border: 1px solid #2d6a4f; }
+    .btn-captcha-off { background: #2a2a4e; color: #888; border: 1px solid #3a3a6e; }
 
-    .add-form { background: #1A1A4E; border-radius: 16px; border: 1px solid #2a2a6e; padding: 24px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
+    .add-form { background: #1A1A4E; border-radius: 16px;
+                border: 1px solid #2a2a6e; padding: 24px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto;
+                 gap: 12px; align-items: end; }
     .form-group label { display: block; font-size: 12px; color: #888; margin-bottom: 6px; }
     .form-group input, .form-group select {
       width: 100%; padding: 10px 12px; background: #0A0A2E;
-      border: 1px solid #2a2a6e; border-radius: 8px; color: white; font-size: 14px; outline: none;
+      border: 1px solid #2a2a6e; border-radius: 8px;
+      color: white; font-size: 14px; outline: none;
     }
     .form-group select option { background: #1A1A4E; }
     .btn-add { padding: 10px 20px; background: #1A237E; color: white;
                border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
     .btn-add:hover { background: #283593; }
-
     .empty { text-align: center; color: #888; padding: 32px; font-size: 14px; }
   </style>
 </head>
@@ -107,15 +107,28 @@
   </div>
 
   <div class="content">
-
-    <!-- Табы -->
     <div class="tabs">
-      <div class="tab active" onclick="showTab('stats')">Статистика</div>
-      <div class="tab" onclick="showTab('users')">Пользователи</div>
+      <div class="tab active" onclick="showTab('stats', this)">Статистика</div>
+      <div class="tab" onclick="showTab('users', this)">Пользователи</div>
     </div>
 
     <!-- ТАБ: СТАТИСТИКА -->
     <div class="tab-content active" id="tab-stats">
+
+      <!-- Статус сервера -->
+      <div class="server-status">
+        <div class="server-dot" id="serverDot"></div>
+        <div class="server-info">
+          <div class="server-name">DiplomaVPN Auth Server</div>
+          <div class="server-ping" id="serverPing">Проверяем...</div>
+          <div class="server-url">vpn-server-4hqg.onrender.com</div>
+        </div>
+        <button onclick="checkServer()"
+                style="background:#1A237E; color:white; border:none;
+                       padding:8px 16px; border-radius:8px; cursor:pointer; font-size:13px;">
+          Обновить
+        </button>
+      </div>
 
       <!-- Карточки -->
       <div class="stats">
@@ -173,11 +186,11 @@
         </table>
       </div>
       <div class="table-wrap" th:if="${userStats.isEmpty()}">
-        <div class="empty">Нет данных. Войдите в приложение чтобы увидеть статистику.</div>
+        <div class="empty">Нет данных. Войдите через приложение или /gateway.</div>
       </div>
 
       <!-- Последние события -->
-      <div class="section-title" style="margin-top:24px;">Последние 10 событий</div>
+      <div class="section-title" style="margin-top:24px;">🕐 Последние 10 событий</div>
       <div class="table-wrap" th:if="${!recentEvents.isEmpty()}">
         <table>
           <thead>
@@ -202,14 +215,13 @@
         </table>
       </div>
       <div class="table-wrap" th:if="${recentEvents.isEmpty()}">
-        <div class="empty">Нет событий. Войдите в приложение чтобы увидеть историю.</div>
+        <div class="empty">Нет событий пока.</div>
       </div>
 
     </div>
 
     <!-- ТАБ: ПОЛЬЗОВАТЕЛИ -->
     <div class="tab-content" id="tab-users">
-
       <div class="section-title">Пользователи системы</div>
       <div class="table-wrap">
         <table>
@@ -221,6 +233,7 @@
               <th>Email</th>
               <th>Роль</th>
               <th>CAPTCHA</th>
+              <th>Последний вход</th>
               <th>Статус</th>
               <th>Действия</th>
             </tr>
@@ -232,14 +245,25 @@
               <td>
                 <span th:text="${user.password}"
                       style="background:#0A0A2E; padding:3px 8px;
-                             border-radius:6px; font-family:monospace; color:#4FC3F7;"></span>
+                             border-radius:6px; font-family:monospace;
+                             color:#4FC3F7; font-size:13px;"></span>
               </td>
-              <td th:text="${user.email}" style="color:#888;"></td>
+              <td th:text="${user.email}" style="color:#888; font-size:13px;"></td>
               <td>
                 <span class="role-admin" th:if="${user.role == 'admin'}">admin</span>
                 <span class="role-user" th:if="${user.role == 'user'}">user</span>
               </td>
-              <td th:text="${user.captchaRequired ? 'Да' : '— Нет'}"></td>
+              <td>
+                <form method="post" action="/admin/toggle-captcha" style="display:inline">
+                  <input type="hidden" name="username" th:value="${user.username}"/>
+                  <button type="submit"
+                          th:class="${user.captchaRequired ? 'btn btn-captcha-on' : 'btn btn-captcha-off'}"
+                          th:text="${user.captchaRequired ? 'Вкл' : '— Выкл'}">
+                  </button>
+                </form>
+              </td>
+              <td th:text="${user.lastLoginFormatted}"
+                  style="color:#888; font-size:12px;"></td>
               <td>
                 <span class="status-active" th:if="${!user.blocked}">Активен</span>
                 <span class="status-blocked" th:if="${user.blocked}">Заблокирован</span>
@@ -297,19 +321,15 @@
           </div>
         </form>
       </div>
-
     </div>
   </div>
 
   <script th:inline="javascript">
-    // Данные для графиков из сервера
     const chartData = /*[[${chartData}]]*/ {};
-
     const labels = Object.keys(chartData);
     const successData = labels.map(k => chartData[k][0]);
     const failedData = labels.map(k => chartData[k][1]);
 
-    // Линейный график
     new Chart(document.getElementById('lineChart'), {
       type: 'line',
       data: {
@@ -320,40 +340,29 @@
             data: successData,
             borderColor: '#52b788',
             backgroundColor: 'rgba(82,183,136,0.1)',
-            tension: 0.4,
-            fill: true,
-            pointBackgroundColor: '#52b788',
-            pointRadius: 5
+            tension: 0.4, fill: true,
+            pointBackgroundColor: '#52b788', pointRadius: 5
           },
           {
             label: 'Неудачные попытки',
             data: failedData,
             borderColor: '#e07070',
             backgroundColor: 'rgba(224,112,112,0.1)',
-            tension: 0.4,
-            fill: true,
-            pointBackgroundColor: '#e07070',
-            pointRadius: 5
+            tension: 0.4, fill: true,
+            pointBackgroundColor: '#e07070', pointRadius: 5
           }
         ]
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { labels: { color: '#888', font: { size: 12 } } }
-        },
+        plugins: { legend: { labels: { color: '#888', font: { size: 12 } } } },
         scales: {
           x: { ticks: { color: '#888' }, grid: { color: '#2a2a6e' } },
-          y: {
-            ticks: { color: '#888', stepSize: 1 },
-            grid: { color: '#2a2a6e' },
-            min: 0
-          }
+          y: { ticks: { color: '#888', stepSize: 1 }, grid: { color: '#2a2a6e' }, min: 0 }
         }
       }
     });
 
-    // Круговая диаграмма
     const totalSuccess = /*[[${totalSuccess}]]*/ 0;
     const totalFailed = /*[[${totalFailed}]]*/ 0;
 
@@ -370,19 +379,47 @@
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { labels: { color: '#888', font: { size: 12 } } }
-        }
+        plugins: { legend: { labels: { color: '#888', font: { size: 12 } } } }
       }
     });
 
+    // Проверка статуса сервера
+    function checkServer() {
+      const dot = document.getElementById('serverDot');
+      const ping = document.getElementById('serverPing');
+      ping.textContent = 'Проверяем...';
+      dot.className = 'server-dot';
+
+      const start = Date.now();
+      fetch('/api/auth/health')
+        .then(res => {
+          const ms = Date.now() - start;
+          if (res.ok) {
+            dot.className = 'server-dot online';
+            ping.textContent = 'Онлайн — ' + ms + ' мс';
+          } else {
+            dot.className = 'server-dot offline';
+            ping.textContent = 'Офлайн';
+          }
+        })
+        .catch(() => {
+          dot.className = 'server-dot offline';
+          ping.textContent = 'Недоступен';
+        });
+    }
+
     // Переключение табов
-    function showTab(name) {
+    function showTab(name, el) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.getElementById('tab-' + name).classList.add('active');
-      event.target.classList.add('active');
+      el.classList.add('active');
     }
+
+    // Проверяем сервер при загрузке
+    checkServer();
+    // Обновляем каждые 30 секунд
+    setInterval(checkServer, 30000);
   </script>
 </body>
 </html>
