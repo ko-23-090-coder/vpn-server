@@ -21,7 +21,7 @@ public class AuthController {
     private static final String VPN_IP = "0.0.0.0";
     private static final int VPN_PORT = 1194;
 
-    public AuthController(AuthService a, TotpService t, 
+    public AuthController(AuthService a, TotpService t,
                          JwtUtil j, StatsService s) {
         this.authService = a;
         this.totpService = t;
@@ -33,7 +33,7 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req) {
         return authService.authenticate(req.getUsername(), req.getPassword())
                 .map(user -> {
-    authService.generateAndStoreSmsCode(user.getId());
+                    authService.generateAndStoreSmsCode(user.getId());
                     LoginResponse r = new LoginResponse();
                     r.setRequiresTwoFactor(true);
                     r.setTwoFactorMethod("SMS");
@@ -42,7 +42,6 @@ public class AuthController {
                     return ResponseEntity.ok(r);
                 })
                 .orElseGet(() -> {
-                    // Записываем неудачную попытку
                     statsService.record(req.getUsername(), "unknown",
                         false, "Неверный логин/пароль");
                     LoginResponse e = new LoginResponse();
@@ -75,6 +74,7 @@ public class AuthController {
             authService.findById(req.getUserId()).ifPresent(u ->
                 statsService.record(u.getUsername(), req.getUserId(),
                     true, "Успешный вход"));
+            authService.updateLastLogin(req.getUserId());
             r.setToken(jwtUtil.generateToken(req.getUserId()));
             r.setVpnConfig(new VpnConfig(VPN_IP, VPN_PORT));
         }
@@ -96,6 +96,7 @@ public class AuthController {
         authService.findById(req.getUserId()).ifPresent(u ->
             statsService.record(u.getUsername(), req.getUserId(),
                 true, "Успешный вход"));
+        authService.updateLastLogin(req.getUserId());
 
         TwoFactorResponse r = new TwoFactorResponse();
         r.setToken(jwtUtil.generateToken(req.getUserId()));
