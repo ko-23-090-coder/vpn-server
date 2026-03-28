@@ -34,8 +34,6 @@ public class AuthController {
         return authService.authenticate(req.getUsername(), req.getPassword())
                 .map(user -> {
     authService.generateAndStoreSmsCode(user.getId());
-    statsService.record(req.getUsername(), user.getId(),
-        true, "Вход: ожидание SMS");
                     LoginResponse r = new LoginResponse();
                     r.setRequiresTwoFactor(true);
                     r.setTwoFactorMethod("SMS");
