@@ -190,7 +190,7 @@
       </div>
 
       <!-- Последние события -->
-      <div class="section-title" style="margin-top:24px;">🕐 Последние 10 событий</div>
+      <div class="section-title" style="margin-top:24px;">Последние 10 событий</div>
       <div class="table-wrap" th:if="${!recentEvents.isEmpty()}">
         <table>
           <thead>
@@ -396,15 +396,15 @@
           const ms = Date.now() - start;
           if (res.ok) {
             dot.className = 'server-dot online';
-            ping.textContent = '🟢 Онлайн — ' + ms + ' мс';
+            ping.textContent = 'Онлайн — ' + ms + ' мс';
           } else {
             dot.className = 'server-dot offline';
-            ping.textContent = '🔴 Офлайн';
+            ping.textContent = 'Офлайн';
           }
         })
         .catch(() => {
           dot.className = 'server-dot offline';
-          ping.textContent = '🔴 Недоступен';
+          ping.textContent = 'Недоступен';
         });
     }
 
