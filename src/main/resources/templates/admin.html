@@ -427,11 +427,7 @@
     }
 
     // Все формы в таблице пользователей добавляем ?tab=users к action
-    document.querySelectorAll('form[action^="/admin/block"],
-      form[action^="/admin/unblock"],
-      form[action^="/admin/delete"],
-      form[action^="/admin/toggle-captcha"],
-      form[action^="/admin/add"]').forEach(form => {
+    document.querySelectorAll('form[action^="/admin/block"], form[action^="/admin/unblock"], form[action^="/admin/delete"], form[action^="/admin/toggle-captcha"], form[action^="/admin/add"]').forEach(form => {
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'redirect_tab';
